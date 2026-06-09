@@ -1,0 +1,7 @@
+{
+  "name": "rtlsdr-receiver-experiment",
+  "version": "0.1.0",
+  "dependencies": [
+    "rtlsdr"
+  ]
+}
