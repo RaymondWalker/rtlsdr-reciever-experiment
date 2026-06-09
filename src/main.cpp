@@ -1,5 +1,9 @@
 #include <iostream>
 #include <rtl-sdr.h>
+#include <conio.h>
+#include <thread>
+#include <chrono>
+
 
 int main() 
 { 
@@ -60,16 +64,39 @@ int main()
         return 1;
     }
 
-    // Read samples
-    if (rtlsdr_read_sync(dev, buffer, bytes_to_read, &n_read) >= 0)
+
+    std::cout << "Beginning Sample Reading, press Z to quit" << std::endl;
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    
+    while (1)
     {
-        std::cout << "Read " << n_read << std::endl;
+        
+        // Read samples
+        if (rtlsdr_read_sync(dev, buffer, bytes_to_read, &n_read) >= 0)
+        {
+            std::cout << "Read " << n_read << std::endl;
+            // Delay for 1ms for readability
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
+
+        if (_kbhit()) 
+        {
+            char key = _getch(); //Read key
+            if (key == 'z' || key == 'Z') 
+            {
+                break;
+            }
+        }
+
+
+
     }
+    
 
-
+    std::cout << "Sample collection stopped, exiting" << std::endl;
+   
+    rtlsdr_close(dev);
     // cleanup
     free(buffer);
-    rtlsdr_close(dev);
-
     return 0;
 }
