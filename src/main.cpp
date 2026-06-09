@@ -54,6 +54,12 @@ int main()
     uint8_t *buffer = (uint8_t *)malloc(bytes_to_read);
     int n_read = 0;
 
+    if (buffer == NULL)
+    {
+        std::cout << "Buffer failed, exiting" << std::endl;
+        return 1;
+    }
+
     // Read samples
     if (rtlsdr_read_sync(dev, buffer, bytes_to_read, &n_read) >= 0)
     {
