@@ -65,8 +65,9 @@ int main()
     }
 
 
-    std::cout << "Beginning Sample Reading, press Z to quit" << std::endl;
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    std::cout << "Beginning Sample Reading" << std::endl;
+    std::cout << "****press Z to quit****" << std::endl;
+    std::this_thread::sleep_for(std::chrono::milliseconds(1500));
     
     while (1)
     {
