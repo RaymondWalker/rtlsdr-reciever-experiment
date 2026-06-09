@@ -66,7 +66,7 @@ int main()
 
 
     std::cout << "Beginning Sample Reading, press Z to quit" << std::endl;
-    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     
     while (1)
     {
@@ -74,9 +74,21 @@ int main()
         // Read samples
         if (rtlsdr_read_sync(dev, buffer, bytes_to_read, &n_read) >= 0)
         {
-            std::cout << "Read " << n_read << std::endl;
+            // Read IQ
+            int num_samples = n_read / 2; //For each sample, 1 I 1 Q
+            std::cout << "Read: " << num_samples << " IQ Samples" << std::endl;
+
+            // Print first 10 IQ Pairs
+            int print_count = std::min(10, num_samples);
+            for (int i = 0; i < print_count; i++)
+            {
+                //subtract 127 to center
+                int8_t I = (int8_t)(buffer[2*i]   - 127);
+                int8_t Q = (int8_t)(buffer[2*i+1] - 127);
+                std::cout << " [" << (i+1) << "] I=" << (int)I << " Q=" << (int)Q << std::endl;
+            }
             // Delay for 1ms for readability
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
         }
 
         if (_kbhit()) 
@@ -87,9 +99,6 @@ int main()
                 break;
             }
         }
-
-
-
     }
     
 
